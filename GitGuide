@@ -1,0 +1,17 @@
+ Git Version Control Guide:
+    SOLVE the bugs your created in master branch!!!
+
+    Setup:
+    1. Install Git: https://git-scm.com/downloads
+    2. Install Git Extension: http://gitextensions.github.io/
+    3. Config your github name and email
+    4. Clone repo from github: https://github.com/RikidWai/Mobile-App.git
+    5. Create local branch form remote Master branch and make it dev[Your Name]
+
+    Working Routine:
+    1. Checkout your branch, pull from master branch for any update.
+    2. Edit codes
+    3. Commit your LOCAL branch first, push to your REMOTE branch, then checkout master branch.
+    4. Merge your LOCAL branch to LOCAL master branch, push LOCAL master branch to REMOTE master branch.
+        Master -> Master
+    5. Checkout to your branch 
