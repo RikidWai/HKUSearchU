@@ -7,6 +7,8 @@
     3. Config your github name and email
     4. Clone repo from github: https://github.com/RikidWai/Mobile-App.git
     5. Create local branch form remote Master branch and make it dev[Your Name]
+    6. Install kdiff3: https://sourceforge.net/projects/kdiff3/ and set the path
+    7. Set linux tool path to : C:\Program Files\Git\bin
 
     Working Routine:
     1. Checkout your branch, pull from master branch for any update.
