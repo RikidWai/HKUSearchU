@@ -2,5 +2,5 @@
 2. Run the following command in terminal: npm install --global expo-cli
 
 Run the app:
-1. expo start
+1. rwhfdowhgojwehogiwhg
 2. open android/IOS emulator and type a for running on Andriod/i for running on IOS
