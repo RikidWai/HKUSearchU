@@ -1,12 +1,21 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import MapView, {Marker} from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <MapView style={styles.map} 
+                initialRegion={{
+                  latitude: 22.283636,
+                  longitude: 114.135511,
+                  latitudeDelta: 0.04,
+                  longitudeDelta: 0.05,
+                }}>
+        <Marker coordinate={{ latitude: 22.283636,
+                  longitude: 114.135511,}}
+        />
+      </MapView>
     </View>
   );
 }
@@ -17,5 +26,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
