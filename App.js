@@ -1,34 +1,59 @@
 import * as React from 'react';
-import MapView, {Marker} from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-export default function App() {
+import Info from './screens/Info';
+import MainTabScreen from './screens/MainTabScreen';
+
+// function HomeScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Home Screen</Text>
+//       <Button
+//         title="Press Me"
+//         onPress={() => navigation.navigate('Details')}
+//       />
+//     </View>
+//   );
+// }
+
+// function DetailsScreen() {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Details Screen</Text>
+//     </View>
+//   );
+// }
+
+// function SettingsScreen() {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Details Screen</Text>
+//     </View>
+//   );
+// }
+
+// function AccountsScreen() {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Details Screen</Text>
+//     </View>
+//   );
+// }
+
+const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function App() {
   return (
-    <View style={styles.container}>
-      <MapView style={styles.map} 
-                initialRegion={{
-                  latitude: 22.283636,
-                  longitude: 114.135511,
-                  latitudeDelta: 0.04,
-                  longitudeDelta: 0.05,
-                }}>
-        <Marker coordinate={{ latitude: 22.283636,
-                  longitude: 114.135511,}}
-        />
-      </MapView>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="HomeScreen" component={MainTabScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-});
+export default App;
