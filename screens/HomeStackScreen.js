@@ -1,21 +1,12 @@
 import * as React from "react";
-import { Button, View, Text, Dimensions, StyleSheet, FlatList } from "react-native";
+import { View, Text, Dimensions, StyleSheet, FlatList, Platform } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import config from "../config/firebaseCongfig";
 import firebase from "firebase";
+import { Button, Card, Title, Paragraph, Appbar, Avatar } from 'react-native-paper';
+import { ScrollView } from "react-native-gesture-handler";
 
-const listOfName = [
-  { key: "Devin", latitude: "1.0", longtitude: "2.0" },
-  { key: "Dan", latitude: "1.0", longtitude: "2.0" },
-  { key: "Dominic", latitude: "1.0", longtitude: "2.0" },
-  { key: "Jason", latitude: "1.0", longtitude: "2.0" },
-  { key: "James", latitude: "1.0", longtitude: "2.0" },
-  { key: "Joel", latitude: "1.0", longtitude: "2.0" },
-  { key: "John", latitude: "1.0", longtitude: "2.0" },
-  { key: "Jillian", latitude: "1.0", longtitude: "2.0" },
-  { key: "Jimmy", latitude: "1.0", longtitude: "2.0" },
-  { key: "Julie", latitude: "1.0", longtitude: "2.0" },
-];
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAUowyCkGQud44YYIIAxqA4np-pDSUIuqI",
@@ -32,32 +23,33 @@ const HomeStackScreen = ({ navigation }) => {
   let dataLo = [];
   // let locationKey = [{"key": "HKU"}];
   const [locationKey, setlocationKey] = React.useState("");
+  const [records, setrecords] = React.useState("");
 
-  function componentWillMount() {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    } else {
-      firebase.app();
-    }
+  // function componentWillMount() {
+  //   if (!firebase.apps.length) {
+  //     firebase.initializeApp(firebaseConfig);
+  //   } else {
+  //     firebase.app();
+  //   }
 
-    firebase
-      .database()
-      .ref("location/CYM")
-      .set({
-        latitude: 5.0665,
-        longtitude: 8.01413,
-      })
-      .then(() => {
-        console.log("INSERTED!!");
-      })
-      .catch((error) => {
-        console.log("ERROR inserting");
-      });
-  }
+  //   firebase
+  //     .database()
+  //     .ref("location/CYM")
+  //     .set({
+  //       latitude: 5.0665,
+  //       longtitude: 8.01413,
+  //     })
+  //     .then(() => {
+  //       console.log("INSERTED!!");
+  //     })
+  //     .catch((error) => {
+  //       console.log("ERROR inserting");
+  //     });
+  // }
 
-  function getData() {
-    let dataLo = [];
+  const getData = () => {
     let locationKeyTemp = [];
+    let recordsTemp = {};
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     } else {
@@ -69,27 +61,91 @@ const HomeStackScreen = ({ navigation }) => {
       .ref("location")
       .on("value", (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
-          console.log(childSnapshot.key);
+          //console.log(childSnapshot);
           locationKeyTemp.push({ key: childSnapshot.key });
+          recordsTemp[childSnapshot.key] = childSnapshot.val();
         });
+        console.log(recordsTemp);
+        setrecords(recordsTemp);
         setlocationKey(locationKeyTemp);
       });
-
-    console.log(locationKey);
   }
+
+  const [listOfKey, setlistofKey] = React.useState(() => {
+    let locationKeyTemp = [];
+    let recordsTemp = {};
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    } else {
+      firebase.app();
+    }
+
+    firebase
+      .database()
+      .ref("location")
+      .on("value", (snapshot) => {
+        snapshot.forEach(function (childSnapshot) {
+          //console.log(childSnapshot);
+          locationKeyTemp.push({ key: childSnapshot.key });
+          recordsTemp[childSnapshot.key] = childSnapshot.val();
+        });
+        console.log(recordsTemp);
+        setrecords(recordsTemp);
+        setlocationKey(locationKeyTemp);
+      });
+  })
+
+  // const [listOfData, setlistofData] = React.useState(() => {
+  //   let recordsTemp = [];
+  //   if (!firebase.apps.length) {
+  //     firebase.initializeApp(firebaseConfig);
+  //   } else {
+  //     firebase.app();
+  //   }
+
+  //   firebase
+  //     .database()
+  //     .ref("location")
+  //     .on("value", (snapshot) => {
+  //       snapshot.forEach(function (childSnapshot) {
+  //         //console.log(childSnapshot);
+  //         recordsTemp.push({ record: childSnapshot });
+  //       });
+  //       setrecords(recordsTemp);
+  //       console.log(records);
+  //     });
+    
+  // })
+
+
 
   function showData() {
     console.log(locationKey);
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Home</Text>
-      <Button title="Insert Data" onPress={() => componentWillMount()}></Button>
-      <Button title="Get Data" onPress={() => getData()}></Button>
-      <Button title="Show Data" onPress={() => showData()}></Button>
-      <FlatList data={locationKey} renderItem={({ item }) => <Text style={styles.item}>{item.key}</Text>} />
+    <View style={styles.view}>
+      <Appbar.Header>
+        <Appbar.Content title="Records" subtitle={'All Records'} />
+        <Appbar.Action icon="refresh" onPress={getData} />
+      </Appbar.Header>
+      <ScrollView>
+        <FlatList data={locationKey} renderItem={({item}) => 
+          <Card style={styles.card}>
+            <Card.Title title={records[item.key].description} subtitle={records[item.key].date}/>
+            <Card.Content>
+              <Title>{records[item.key].type}</Title>
+              <Paragraph>Location: {records[item.key].location}</Paragraph>
+              <Paragraph>Detailed Lcoation: {records[item.key].detailedLocation}</Paragraph>
+              <Paragraph>Retrieve: {records[item.key].retrieve}</Paragraph>
+            </Card.Content>
+
+          </Card>
+        }/>
+        
+      </ScrollView>
     </View>
+      
   );
 };
 
@@ -99,12 +155,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 40
   },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+  card: {
+    marginBottom: 10,
   },
+  view: {
+    marginBottom: 80,
+  }
 });
 
 export default HomeStackScreen;

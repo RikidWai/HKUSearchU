@@ -9,8 +9,8 @@ const MapStackScreen = ({navigation}) => {
                   initialRegion={{
                     latitude: 22.283636,
                     longitude: 114.135511,
-                    latitudeDelta: 0.04,
-                    longitudeDelta: 0.05,
+                    latitudeDelta: 0.002,
+                    longitudeDelta: 0.002,
                   }}>
           <Marker coordinate={{ latitude: 22.283636,
                     longitude: 114.135511,}}

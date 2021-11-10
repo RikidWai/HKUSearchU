@@ -49,8 +49,8 @@ const Drawer = createDrawerNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="HomeScreen" component={MainTabScreen} />
+      <Stack.Navigator initialRouteName="Home" >
+        <Stack.Screen name="HomeScreen" component={MainTabScreen} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
