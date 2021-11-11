@@ -3,13 +3,16 @@
 // import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView, Text, Platform, Alert } from "react-native";
+// alan
+import { Image, View, StyleSheet, ScrollView, Text, Platform, Alert, LogBox } from "react-native";
 import { FormBuilder } from "react-native-paper-form-builder";
 import { useForm } from "react-hook-form";
 import { TextInput, Button, Provider } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "firebase";
+// alan
+LogBox.ignoreLogs(["Setting a timer"]);
 // import firebaseConfig from "../config/firebaseCongfig";
 
 const firebaseConfig = {
@@ -26,31 +29,56 @@ const firebaseConfig = {
 const SettingStackScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (Platform.OS !== "web") {
-  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //       if (status !== "granted") {
-  //         alert("Sorry, we need camera roll permissions to make this work!");
-  //       }
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+  }, []);
 
-  // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
+  // alan
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  //   console.log(result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
+    if (!result.cancelled) {
+      setImage(result.uri);
+      console.log(result.uri);
+      this.uploadImage(result.uri, "test-image")
+        .then(() => {
+          Alert.alert("Success");
+        })
+        .catch((error) => {
+          console.log("test4");
+          console.log(error);
+        });
+    }
+  };
+  // alan
+  uploadImage = async (uri, imageName) => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    } else {
+      firebase.app();
+    }
+    console.log("test1");
+    const response = await fetch(uri);
+    console.log("test2");
+    const blob = await response.blob();
+    var ref = firebase
+      .storage()
+      .ref()
+      .child("images/" + imageName);
+    return ref.put(blob);
+  };
 
   const { control, setFocus, handleSubmit } = useForm({
     defaultValues: {
@@ -281,11 +309,11 @@ const SettingStackScreen = ({ navigation }) => {
               maximumDate={Date.now()}
             />
           )}
-
-          {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Button mode={"contained"} title="Pick an image from camera roll" onPress={pickImage} />
-          {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </View> */}
+          {/* Alan */}
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <Button mode={"contained"} title="Pick an image from camera roll" onPress={pickImage} />
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+          </View>
           <Button mode={"contained"} onPress={handleSubmit(onSubmit)} icon="send">
             Submit
           </Button>
