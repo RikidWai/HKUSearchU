@@ -3,7 +3,7 @@
 // import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView, Text, Platform, Alert } from "react-native";
+import { Image, View, StyleSheet, ScrollView, Text, Platform, Alert, LogBox, Dimensions } from "react-native";
 import { FormBuilder } from "react-native-paper-form-builder";
 import { useForm } from "react-hook-form";
 import { TextInput, Button, Provider } from "react-native-paper";
@@ -27,31 +27,56 @@ const firebaseConfig = {
 const SettingStackScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     if (Platform.OS !== "web") {
-  //       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  //       if (status !== "granted") {
-  //         alert("Sorry, we need camera roll permissions to make this work!");
-  //       }
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+  }, []);
 
-  // const pickImage = async () => {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //     quality: 1,
-  //   });
+  // alan
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
 
-  //   console.log(result);
-
-  //   if (!result.cancelled) {
-  //     setImage(result.uri);
-  //   }
-  // };
+    if (!result.cancelled) {
+      setImage(result.uri);
+      console.log(result.uri);
+      
+      // this.uploadImage(result.uri, "test-image1")
+      //   .then(() => {
+      //     Alert.alert("Success");
+      //   })
+      //   .catch((error) => {
+      //     console.log("test4");
+      //     console.log(error);
+      //   });
+    }
+  };
+  // alan
+  uploadImage = async (uri, imageName) => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    } else {
+      firebase.app();
+    }
+    console.log("test1");
+    const response = await fetch(uri);
+    console.log("test2");
+    const blob = await response.blob();
+    var ref = firebase
+      .storage()
+      .ref()
+      .child("images/" + imageName);
+    return ref.put(blob);
+  };
 
   const { control, setFocus, handleSubmit } = useForm({
     defaultValues: {
@@ -101,7 +126,8 @@ const SettingStackScreen = ({ navigation }) => {
       firebase.app();
     }
 
-    let uid = uuid.v4();
+    let dateNow = Date.now();
+    let uid = dateNow + "-"+ uuid.v4();
     let dest = "location/" + uid;
     console.log(date);
     firebase
@@ -117,19 +143,28 @@ const SettingStackScreen = ({ navigation }) => {
       })
       .then(() => {
         console.log("INSERTED!!");
+        defaultValues = {
+          type: "",
+          location: "",
+          detailedLocation: "",
+          date: "",
+          contact: "",
+        }
+        
         Alert.alert("Report Submitted", "Thank you for your support");
       })
       .catch((error) => {
         console.log("ERROR inserting");
       });
-    
-      defaultValues = {
-        type: "",
-        location: "",
-        detailedLocation: "",
-        date: "",
-        contact: "",
-      }
+    this.uploadImage(image, uid)
+      .then(() => {
+        Alert.alert("Image Upload Succesful");
+      })
+      .catch((error) => {
+        console.log("test4");
+        console.log(error);
+      });
+      
 
   };
 
@@ -183,7 +218,10 @@ const SettingStackScreen = ({ navigation }) => {
                   },
                   {
                     value: "waterBottle",
-                    label: " Water Bottle",
+                    label: "Water Bottle",
+                  },
+                  { value: "love",
+                    label: "Love",
                   },
                   {
                     value: "others",
@@ -295,10 +333,12 @@ const SettingStackScreen = ({ navigation }) => {
             />
           )}
 
-          {/* <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-          <Button mode={"contained"} title="Pick an image from camera roll" onPress={pickImage} />
-          {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </View> */}
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <Button mode={"contained"} title="Pick an image from camera roll" onPress={pickImage} icon="image">
+              Upload Image 
+            </Button>
+            {image && <Image source={{ uri: image }} style={styles.image} />}
+          </View>
           <Button mode={"contained"} onPress={handleSubmit(onSubmit)} icon="send">
             Submit
           </Button>
@@ -336,6 +376,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  image: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').width,
+    resizeMode: 'contain'
+  }
 });
 
 export default SettingStackScreen;

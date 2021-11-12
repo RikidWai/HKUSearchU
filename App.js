@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import Info from './screens/Info';
+import FilteredScreen from './screens/FilteredScreen';
 import MainTabScreen from './screens/MainTabScreen';
 
 // function HomeScreen({ navigation }) {

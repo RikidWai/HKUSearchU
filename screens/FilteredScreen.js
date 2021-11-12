@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, Dimensions, StyleSheet, FlatList, Platform, Image } from "react-native";
+import { View, Text, Dimensions, StyleSheet, FlatList, Platform } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import config from "../config/firebaseCongfig";
 import firebase from "firebase";
@@ -31,54 +31,15 @@ const typeMapping = {
   others: "Others",
 }
 
-
-const HomeStackScreen = ({ navigation }) => {
+const FilteredScreen = ({ navigation, route }) => {
   let dataLo = [];
   // let locationKey = [{"key": "HKU"}];
   const [locationKey, setlocationKey] = React.useState("");
   const [records, setrecords] = React.useState("");
-  const [urls, setUrls] = React.useState("");
-  
 
-  var getData = () => {
+  const getData = () => {
     let locationKeyTemp = [];
     let recordsTemp = {};
-    let urlsTemp = {};
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    } else {
-      firebase.app();
-    }
-
-    firebase
-      .database()
-      .ref("location")
-      .on("value", (snapshot) => {
-        snapshot.forEach(function (childSnapshot) {
-          //console.log(childSnapshot);
-          locationKeyTemp.push(childSnapshot.key);
-          recordsTemp[childSnapshot.key] = childSnapshot.val();
-        });
-        // sortData();
-        //console.log("1"+locationKeyTemp);
-        locationKeyTemp.sort((a,b) => a < b );
-        //console.log("2"+locationKeyTemp);
-        setrecords(recordsTemp);
-        setlocationKey(locationKeyTemp);
-      });
-      // locationKeyTemp.forEach(key => {
-      //   urlsTemp[key] = this.getImage(key);
-  
-      // })
-      // setUrls(urlsTemp);
-  }
-
-
-  //Bug here
-  const [listOfKey, setlistofKey] = React.useState(() => {
-    let locationKeyTemp = [];
-    let recordsTemp = {};
-    let urlsTemp = {};
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     } else {
@@ -98,40 +59,65 @@ const HomeStackScreen = ({ navigation }) => {
         //console.log(locationKeyTemp);
         locationKeyTemp.sort((a,b) => a < b );
         //console.log(locationKey);
+        locationKeyTemp.forEach(key => {
+          if (recordsTemp[key].location == route.params.location) {
+            locationKeyFiltered.push(key);
+          }
+        })
         setrecords(recordsTemp);
-        setlocationKey(locationKeyTemp);
+        setlocationKey(locationKeyFiltered);
       });
-    
-    // locationKeyTemp.forEach(key => {
-    //   urlsTemp[key] = this.getImage(key);
+  }
 
-    // })
-    // setUrls(urlsTemp);
+
+  //Bug here
+  const [listOfKey, setlistofKey] = React.useState(() => {
+    let locationKeyTemp = [];
+    let recordsTemp = {};
+    let locationKeyFiltered = [];
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    } else {
+      firebase.app();
+    }
+
+    firebase
+      .database()
+      .ref("location")
+      .on("value", (snapshot) => {
+        snapshot.forEach(function (childSnapshot) {
+          //console.log(childSnapshot);
+          locationKeyTemp.push(childSnapshot.key);
+          recordsTemp[childSnapshot.key] = childSnapshot.val();
+        });
+        // sortData();
+        //console.log(locationKeyTemp);
+        locationKeyTemp.sort((a,b) => a < b );
+        //console.log(locationKey);
+        locationKeyTemp.forEach(key => {
+          if (recordsTemp[key].location == route.params.location) {
+            locationKeyFiltered.push(key);
+          }
+        })
+        setrecords(recordsTemp);
+        setlocationKey(locationKeyFiltered);
+      });
   })
 
-  // getImage = async (key) => {
-  //   if (!firebase.apps.length) {
-  //     firebase.initializeApp(firebaseConfig);
-  //   } else {
-  //     firebase.app();
-  //   }
-  //   let ref = await firebase.storage().ref("images/"+key+".jpg");
-  //   let url = ref.getDownloadURL()
-  //     .then(url => {console.log(url);})
-  //     .catch(e=>{console.log(e);})
-  //   return url;
-  // };
+
+  function sortData() {
+    console.log(locationKey);
+  }
 
   return (
     <View style={styles.view}>
       <Appbar.Header>
-        <Appbar.Content title="Records" subtitle={'All Records'} />
+        <Appbar.Content title={"Records for "+route.params.location} subtitle={'All Records'} />
         <Appbar.Action icon="refresh" onPress={getData} />
       </Appbar.Header>
       <ScrollView>
         <FlatList data={locationKey} renderItem={({item}) => 
           <Card style={styles.card}>
-            <Image source={urls[item]} style={styles.image} />
             <Card.Title title={typeMapping[records[item].type]} subtitle={records[item].date}/>
             <Card.Content>
               <Title>{records[item].description}</Title>
@@ -161,12 +147,7 @@ const styles = StyleSheet.create({
   },
   view: {
     marginBottom: 80,
-  },
-  image: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width,
-    resizeMode: 'contain'
   }
 });
 
-export default HomeStackScreen;
+export default FilteredScreen
