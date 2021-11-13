@@ -67,14 +67,12 @@ const SettingStackScreen = ({ navigation }) => {
     } else {
       firebase.app();
     }
-    console.log("test1");
     const response = await fetch(uri);
-    console.log("test2");
     const blob = await response.blob();
     var ref = firebase
       .storage()
       .ref()
-      .child("images/" + imageName);
+      .child('images/'+imageName);
     return ref.put(blob);
   };
 
@@ -128,7 +126,7 @@ const SettingStackScreen = ({ navigation }) => {
 
     let dateNow = Date.now();
     let uid = dateNow + "-"+ uuid.v4();
-    let dest = "location/" + uid;
+    let dest = "data/" + uid;
     console.log(date);
     firebase
       .database()

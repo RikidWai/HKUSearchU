@@ -5,8 +5,12 @@ import config from "../config/firebaseCongfig";
 import firebase from "firebase";
 import { Button, Card, Title, Paragraph, Appbar, Avatar } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
+import DisplayImageScreen from "./DisplayImageScreen";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { useSafeAreaFrame } from "react-native-safe-area-context";
 
-
+const Stack = createNativeStackNavigator();
 
 const firebaseConfig = {
   apiKey: "AIzaSyAUowyCkGQud44YYIIAxqA4np-pDSUIuqI",
@@ -31,6 +35,23 @@ const typeMapping = {
   others: "Others",
 }
 
+
+
+// const FilteredEntryScreen = (navigation, route) => {
+
+//   return (
+//     <NavigationContainer independent={true}>
+//       <Stack.Navigator independent={true}>
+//         <Stack.Screen
+//           name="Home"
+//           component={FilteredScreen}
+//         />
+//         <Stack.Screen name="DisplayImage" component={DisplayImageScreen} />
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   )
+// }
+
 const FilteredScreen = ({ navigation, route }) => {
   let dataLo = [];
   // let locationKey = [{"key": "HKU"}];
@@ -48,7 +69,7 @@ const FilteredScreen = ({ navigation, route }) => {
 
     firebase
       .database()
-      .ref("location")
+      .ref("data")
       .on("value", (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
           //console.log(childSnapshot);
@@ -83,7 +104,7 @@ const FilteredScreen = ({ navigation, route }) => {
 
     firebase
       .database()
-      .ref("location")
+      .ref("data")
       .on("value", (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
           //console.log(childSnapshot);
@@ -124,6 +145,11 @@ const FilteredScreen = ({ navigation, route }) => {
               <Paragraph>Location: {records[item].location}</Paragraph>
               <Paragraph>Detailed Lcoation: {records[item].detailedLocation}</Paragraph>
               <Paragraph>Retrieve: {records[item].retrieve}</Paragraph>
+              <Button mode={"contained"} onPress={() =>
+                  navigation.navigate('DisplayImage', { key: item })
+                } icon="image">
+                  View Image
+                </Button>
             </Card.Content>
           </Card>
         }/>

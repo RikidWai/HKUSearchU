@@ -7,6 +7,7 @@ import { render } from 'react-dom';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import FilteredScreen from './FilteredScreen';
+import DisplayImageScreen from './DisplayImageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ const EntryScreen = (navigation) => {
           component={MapStackScreen}
         />
         <Stack.Screen name="FilteredRecords" component={FilteredScreen} />
+        <Stack.Screen name="DisplayImage" component={DisplayImageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -47,10 +49,6 @@ const MapStackScreen = ({navigation}) => {
       longitude: 114.139846
     }, 
   }]
-
-  const handleMarkerPressed = (title) => {
-    console.log("bullshit");
-  }
 
     return (
       <View>
