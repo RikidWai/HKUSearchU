@@ -36,22 +36,6 @@ const typeMapping = {
 }
 
 
-
-// const FilteredEntryScreen = (navigation, route) => {
-
-//   return (
-//     <NavigationContainer independent={true}>
-//       <Stack.Navigator independent={true}>
-//         <Stack.Screen
-//           name="Home"
-//           component={FilteredScreen}
-//         />
-//         <Stack.Screen name="DisplayImage" component={DisplayImageScreen} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   )
-// }
-
 const FilteredScreen = ({ navigation, route }) => {
   let dataLo = [];
   // let locationKey = [{"key": "HKU"}];
@@ -133,7 +117,8 @@ const FilteredScreen = ({ navigation, route }) => {
   return (
     <View style={styles.view}>
       <Appbar.Header>
-        <Appbar.Content title={"Records for "+route.params.location} subtitle={'All Records'} />
+        <Appbar.Action icon="arrow-left" onPress={navigation.goBack} />
+        <Appbar.Content title={"Records for "+route.params.location} subtitle={'Filtered Records'} />
         <Appbar.Action icon="refresh" onPress={getData} />
       </Appbar.Header>
       <ScrollView>

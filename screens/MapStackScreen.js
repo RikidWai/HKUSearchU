@@ -18,9 +18,21 @@ const EntryScreen = (navigation) => {
         <Stack.Screen
           name="Map"
           component={MapStackScreen}
+          options={{ headerStyle: {
+            backgroundColor: '#6404ec'
+         }, headerTitleStyle: {
+          color: '#fff',
+          // use your preferred color code
+        }, headerTintColor: '#ffffff' }}
         />
-        <Stack.Screen name="FilteredRecords" component={FilteredScreen} />
-        <Stack.Screen name="DisplayImage" component={DisplayImageScreen} />
+        <Stack.Screen name="FilteredRecords" component={FilteredScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="DisplayImage" component={DisplayImageScreen} 
+        options={{ headerStyle: {
+          backgroundColor: '#6404ec'
+       }, headerTitleStyle: {
+        color: '#fff',
+        // use your preferred color code
+      }, headerTintColor: '#ffffff' }}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

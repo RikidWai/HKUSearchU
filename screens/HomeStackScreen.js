@@ -41,8 +41,14 @@ const EntryHomeScreen = (navigation) => {
         <Stack.Screen
           name="Home"
           component={HomeStackScreen}
+          options={{headerShown: false}}
         />
-        <Stack.Screen name="DisplayImage" component={DisplayImageScreen} />
+        <Stack.Screen name="DisplayImage" component={DisplayImageScreen} options={{ headerStyle: {
+              backgroundColor: '#6404ec'
+           }, headerTitleStyle: {
+            color: '#fff',
+            // use your preferred color code
+          }, headerTintColor: '#ffffff' }}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -50,7 +56,6 @@ const EntryHomeScreen = (navigation) => {
 
 const HomeStackScreen = ({ navigation }) => {
   let dataLo = [];
-  // let locationKey = [{"key": "HKU"}];
   const [locationKey, setlocationKey] = React.useState("");
   const [records, setrecords] = React.useState("");
   const [urls, setUrls] = React.useState({});
@@ -70,25 +75,15 @@ const HomeStackScreen = ({ navigation }) => {
       .ref("data")
       .on("value", (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
-          //console.log(childSnapshot);
           locationKeyTemp.push(childSnapshot.key);
           recordsTemp[childSnapshot.key] = childSnapshot.val();
         });
-        // sortData();
-        //console.log("1"+locationKeyTemp);
         locationKeyTemp.sort((a, b) => a < b);
-        //console.log("2"+locationKeyTemp);
         setrecords(recordsTemp);
         setlocationKey(locationKeyTemp);
       });
-    // locationKeyTemp.forEach(key => {
-    //   urlsTemp[key] = this.getImage(key);
-
-    // })
-    // setUrls(urlsTemp);
   };
 
-  //Bug here
   var [listOfKey, setlistofKey] = React.useState(() => {
     let locationKeyTemp = [];
     let recordsTemp = {};
@@ -104,66 +99,19 @@ const HomeStackScreen = ({ navigation }) => {
       .ref("data")
       .on("value", (snapshot) => {
         snapshot.forEach(function (childSnapshot) {
-          //console.log(childSnapshot);
           locationKeyTemp.push(childSnapshot.key);
           recordsTemp[childSnapshot.key] = childSnapshot.val();
         });
-        // sortData();
-        //console.log(locationKeyTemp);
         locationKeyTemp.sort((a, b) => a < b);
-        //console.log(locationKey);
         setrecords(recordsTemp);
         setlocationKey(locationKeyTemp);
       });
 
-    // locationKeyTemp.forEach(key => {
-    //   let imageRef = firebase.storage().ref(key);
-    // imageRef
-    //   .getDownloadURL()
-    //   .then((url) => {
-    //     console.log(url);
-    //     setImage(url);
-    //     setUrls(url);
-    //     urlsTemp[key] = {uri: url};
-    //     console.log("Retreived URL"+JSON.stringify({uri: urls}));
-    //   })
-    //   .catch((e) => console.log("getting downloadURL of image error => ", e));
-    //   // console.log("Retreived URL"+JSON.stringify({uri: image}));
-    // });
-    // console.log("HIHIHI")
-    // setUrls(urlsTemp);
-    // console.log("Retreived URL----------"+JSON.stringify(urls));
   });
 
-  // getImage = async (key) => {
-  //   let imageRef = firebase.storage().ref(key);
-  //   imageRef
-  //     .getDownloadURL()
-  //     .then((url) => {
-  //       console.log(url);
-  //       setImage(url);
-  //     })
-  //     .catch((e) => console.log("getting downloadURL of image error => ", e));
-  // };
 
   const [image, setImage] = useState([]);
 
-  // useEffect(() => {
-  //   firebase.storage().ref()
-  //   .child('images')
-  //   .listAll()
-  //   .then(function(result){
-  //     result.items.forEach(function(imageRef){
-  //       imageRef.getDownloadURL().then(function(url){
-  //         image.push(url);
-  //         setImage(imageTab);
-  //       }).catch(function(error) {
-          
-  //       });
-  //     });
-  //   })
-  //   .catch((e) => console.log('Error', e));
-  // }, []);
 
   return (
     <View style={styles.view}>
