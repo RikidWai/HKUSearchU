@@ -4,7 +4,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Image, View, StyleSheet, ScrollView, Text, Platform, Alert, LogBox, Dimensions, Pressable } from "react-native";
-import { FormBuilder } from "react-native-paper-form-builder";
+import { FormBuilder } from "../react-native-paper-form-builder";
 import { useForm } from "react-hook-form";
 import { TextInput, Button, Provider as PaperProvider, Appbar, DefaultTheme } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";

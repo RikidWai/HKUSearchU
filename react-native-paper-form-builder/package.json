@@ -1,0 +1,73 @@
+{
+  "_args": [
+    [
+      "react-native-paper-form-builder@2.1.2",
+      "E:\\git\\Mobile-App"
+    ]
+  ],
+  "_from": "react-native-paper-form-builder@2.1.2",
+  "_id": "react-native-paper-form-builder@2.1.2",
+  "_inBundle": false,
+  "_integrity": "sha512-BhnaVT51cTeNpRfUMNLRnY27tEgik4qZGHYtTctOPSK/E+2Oh3mdnDuVDOlVVkTurdjFMfUPehw9787XFRWyAg==",
+  "_location": "/react-native-paper-form-builder",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-native-paper-form-builder@2.1.2",
+    "name": "react-native-paper-form-builder",
+    "escapedName": "react-native-paper-form-builder",
+    "rawSpec": "2.1.2",
+    "saveSpec": null,
+    "fetchSpec": "2.1.2"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-paper-form-builder/-/react-native-paper-form-builder-2.1.2.tgz",
+  "_spec": "2.1.2",
+  "_where": "E:\\git\\Mobile-App",
+  "author": {
+    "name": "Fateh Farooqui"
+  },
+  "bugs": {
+    "url": "https://github.com/fateh999/react-native-paper-form-builder/issues"
+  },
+  "description": "Form builder component using React Native Paper and React Hook Form",
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/fateh999/react-native-paper-form-builder#readme",
+  "keywords": [
+    "FormBuilder",
+    "Material",
+    "Forms",
+    "React",
+    "Native",
+    "Paper"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "react-native-paper-form-builder",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-paper": "*",
+    "@types/react": "*",
+    "@types/react-native": "*",
+    "typescript": "*",
+    "react-hook-form": "*"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fateh999/react-native-paper-form-builder.git"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "types": "dist/index.d.ts",
+  "version": "2.1.2"
+}
