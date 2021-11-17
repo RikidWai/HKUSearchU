@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { Image, View, StyleSheet, ScrollView, Text, Platform, Alert, LogBox, Dimensions } from "react-native";
 import { FormBuilder } from "react-native-paper-form-builder";
 import { useForm } from "react-hook-form";
-import { TextInput, Button, Provider } from "react-native-paper";
+import { TextInput, Button, Provider, Appbar } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "firebase";
@@ -168,6 +168,9 @@ const SettingStackScreen = ({ navigation }) => {
 
   return (
     <View style={styles.containerStyle}>
+      <Appbar.Header>
+        <Appbar.Content title="Report Lost Items" />
+      </Appbar.Header>
       <ScrollView contentContainerStyle={styles.scrollViewStyle}>
         <Provider>
           <Text style={styles.headingStyle}>Report Lost Item</Text>
