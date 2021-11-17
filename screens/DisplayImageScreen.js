@@ -9,7 +9,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyAUowyCkGQud44YYIIAxqA4np-pDSUIuqI",
     authDomain: "hku-search-u-d8930.firebaseapp.com",
@@ -36,14 +35,28 @@ const DisplayImageScreen = ({ navigation, route }) => {
             console.log(url);
             setImage(url);
         })
-        .catch((e) => console.log("getting downloadURL of image error => ", e));
+        .catch(
+          (e) => {
+            console.log("Error");
+          }
+        );
     }, []);
-    return ( 
-    <View>
-        <View>
-            {image && <Image source={{uri: image}} style={styles.image} />}
-        </View>
-    </View>)
+    if (image){
+      return ( 
+        <View style={styles.view}>
+            <View>
+                {image && <Image source={{uri: image}} style={styles.image} />}
+            </View>
+        </View>)
+    } else {
+      return ( 
+        <View style={styles.view}>
+            <View>
+                <Image source={require('../assets/No_image_available.jpg')} style={styles.image} />
+            </View>
+        </View>)
+    }
+    
 }
 
 const styles = StyleSheet.create({
@@ -58,7 +71,9 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     view: {
-      marginBottom: 80,
+      //marginBottom: 80,
+      backgroundColor: "#eaeaea",
+      flex: 1
     },
     image: {
       width: Dimensions.get("window").width,

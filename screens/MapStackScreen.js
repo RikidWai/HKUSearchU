@@ -19,7 +19,7 @@ const EntryScreen = (navigation) => {
           name="Map"
           component={MapStackScreen}
           options={{ headerStyle: {
-            backgroundColor: '#6404ec'
+            backgroundColor: '#4d9503'
          }, headerTitleStyle: {
           color: '#fff',
           // use your preferred color code
@@ -28,7 +28,7 @@ const EntryScreen = (navigation) => {
         <Stack.Screen name="FilteredRecords" component={FilteredScreen} options={{headerShown: false}}/>
         <Stack.Screen name="DisplayImage" component={DisplayImageScreen} 
         options={{ headerStyle: {
-          backgroundColor: '#6404ec'
+          backgroundColor: '#4d9503'
        }, headerTitleStyle: {
         color: '#fff',
         // use your preferred color code
@@ -42,20 +42,23 @@ const EntryScreen = (navigation) => {
 const MapStackScreen = ({navigation}) => {
   const markers = [{
     title: 'Haking Wong Building',
+    abbr: 'HW',
     coordinates: {
       latitude: 22.283130,
       longitude: 114.136451
     },
   },
   {
-    title: 'KBSB',
+    title: 'Kadoorie Biological Sciences Building',
+    abbr: 'KBSB',
     coordinates: {
       latitude: 22.283453,
       longitude: 114.137094
     },  
   },
   {
-    title: 'CYM',
+    title: 'Chong Yuet Ming Physics Building',
+    abbr: 'CYP',
     coordinates: {
       latitude: 22.283178,
       longitude: 114.139846
@@ -77,12 +80,12 @@ const MapStackScreen = ({navigation}) => {
               title={marker.title}
               key = {marker.title}
               onPress={() =>
-                navigation.navigate('FilteredRecords', { location: marker.title })
+                navigation.navigate('FilteredRecords', { location: marker.title, abbr: marker.abbr})
               }
             >
               <Callout style={styles.plainView}>
                 <View>
-                  <Text>You pressed {marker.title}</Text>
+                  <Text>{marker.abbr}</Text>
                 </View>
               </Callout>
             </Marker>
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
       height: Dimensions.get('window').height,
     },
     plainView: {
-      width: 60,
+      //width: 60,
     },
   });
 

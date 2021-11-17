@@ -3,7 +3,7 @@ import { View, Text, Dimensions, StyleSheet, FlatList, Platform } from "react-na
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import config from "../config/firebaseCongfig";
 import firebase from "firebase";
-import { Button, Card, Title, Paragraph, Appbar, Avatar } from 'react-native-paper';
+import { Button, Card, Title, Paragraph, Appbar, Avatar, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ScrollView } from "react-native-gesture-handler";
 import DisplayImageScreen from "./DisplayImageScreen";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -25,15 +25,20 @@ const firebaseConfig = {
 
 const typeMapping = {
   elecDev: "Electronic Device",
-  walletOrCreditCard: "Wallet/Credit Card",
+  wallet: "Wallet",
   sidCard: "Student ID Card",
   octopus: "Octopus",
   clothes: "Clothes",
   umbrella : "Umbrella",
   waterBottle: "Water Bottle",
-  love: "Love",
   others: "Others",
-}
+};
+
+const abbrMapping = {
+  CYP: "Chong Yuet Ming Physics Building",
+  KBSB: "Kadoorie Biological Sciences Building",
+  HW: "Haking Wong Building",
+};
 
 
 const FilteredScreen = ({ navigation, route }) => {
@@ -65,7 +70,7 @@ const FilteredScreen = ({ navigation, route }) => {
         locationKeyTemp.sort((a,b) => a < b );
         //console.log(locationKey);
         locationKeyTemp.forEach(key => {
-          if (recordsTemp[key].location == route.params.location) {
+          if (recordsTemp[key].location == route.params.abbr) {
             locationKeyFiltered.push(key);
           }
         })
@@ -100,7 +105,7 @@ const FilteredScreen = ({ navigation, route }) => {
         locationKeyTemp.sort((a,b) => a < b );
         //console.log(locationKey);
         locationKeyTemp.forEach(key => {
-          if (recordsTemp[key].location == route.params.location) {
+          if (recordsTemp[key].location == route.params.abbr) {
             locationKeyFiltered.push(key);
           }
         })
@@ -114,34 +119,64 @@ const FilteredScreen = ({ navigation, route }) => {
     console.log(locationKey);
   }
 
+  const avatarMapping = {
+    elecDev: "cellphone",
+    wallet: "wallet",
+    sidCard: "card-account-details",
+    octopus: "numeric-8-box",
+    clothes: "hanger",
+    umbrella: "umbrella",
+    waterBottle: "water",
+    others: "shape-plus",
+  };
+
+
+  var getAvatar = (type) => {
+    return avatarMapping[type];
+  };
+
   return (
+    <PaperProvider theme={cardTheme}>
     <View style={styles.view}>
       <Appbar.Header>
         <Appbar.Action icon="arrow-left" onPress={navigation.goBack} />
-        <Appbar.Content title={"Records for "+route.params.location} subtitle={'Filtered Records'} />
+        <Appbar.Content title={"Records for "+route.params.abbr} subtitle={route.params.location} />
         <Appbar.Action icon="refresh" onPress={getData} />
       </Appbar.Header>
       <ScrollView>
         <FlatList data={locationKey} renderItem={({item}) => 
           <Card style={styles.card}>
-            <Card.Title title={typeMapping[records[item].type]} subtitle={records[item].date}/>
+
+            <Card.Title 
+              title={typeMapping[records[item].type]} 
+              subtitle={records[item].date}
+
+              left = {props => <Avatar.Icon {...props} icon={getAvatar(records[item].type)} />}
+
+              />
             <Card.Content>
               <Title>{records[item].description}</Title>
-              <Paragraph>Location: {records[item].location}</Paragraph>
+              <Paragraph>Location: {abbrMapping[records[item].location]}</Paragraph>
               <Paragraph>Detailed Lcoation: {records[item].detailedLocation}</Paragraph>
               <Paragraph>Retrieve: {records[item].retrieve}</Paragraph>
-              <Button mode={"contained"} onPress={() =>
+              {/* <Button mode={"contained"} onPress={() =>
                   navigation.navigate('DisplayImage', { key: item })
                 } icon="image">
                   View Image
-                </Button>
+                </Button> */}
             </Card.Content>
+            <Card.Actions>
+              <Button onPress={() =>
+                  navigation.navigate('DisplayImage', { key: item })
+                }>View Image</Button>
+            </Card.Actions>
+
           </Card>
         }/>
         
       </ScrollView>
     </View>
-      
+    </PaperProvider>  
   );
 };
 
@@ -157,8 +192,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   view: {
-    marginBottom: 80,
+    //marginBottom: 80,
+    backgroundColor: "#eaeaea",
+    flex: 1
   }
 });
+
+const cardTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#4d9503',
+    accent: '#60be00',
+    //background: '#eaeaea',
+    //surface: '#f0fdf4',
+  },
+};
 
 export default FilteredScreen

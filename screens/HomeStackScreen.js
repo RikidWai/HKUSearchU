@@ -3,7 +3,7 @@ import { View, Text, Dimensions, StyleSheet, FlatList, Platform, Image, LogBox }
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps";
 import config from "../config/firebaseCongfig";
 import firebase from "firebase";
-import { Button, Card, Title, Paragraph, Appbar, Avatar } from "react-native-paper";
+import { Button, Card, Title, Paragraph, Appbar, Avatar, DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import DisplayImageScreen from "./DisplayImageScreen";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,14 +24,19 @@ const firebaseConfig = {
 
 const typeMapping = {
   elecDev: "Electronic Device",
-  walletOrCreditCard: "Wallet/Credit Card",
+  wallet: "Wallet",
   sidCard: "Student ID Card",
   octopus: "Octopus",
   clothes: "Clothes",
   umbrella: "Umbrella",
   waterBottle: "Water Bottle",
-  love: "Love",
   others: "Others",
+};
+
+const abbrMapping = {
+  CYP: "Chong Yuet Ming Physics Building",
+  KBSB: "Kadoorie Biological Sciences Building",
+  HW: "Haking Wong Building",
 };
 
 const EntryHomeScreen = (navigation) => {
@@ -44,7 +49,7 @@ const EntryHomeScreen = (navigation) => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="DisplayImage" component={DisplayImageScreen} options={{ headerStyle: {
-              backgroundColor: '#6404ec'
+              backgroundColor: '#4d9503'
            }, headerTitleStyle: {
             color: '#fff',
             // use your preferred color code
@@ -112,11 +117,29 @@ const HomeStackScreen = ({ navigation }) => {
 
   const [image, setImage] = useState([]);
 
+  const avatarMapping = {
+    elecDev: "cellphone",
+    wallet: "wallet",
+    sidCard: "card-account-details",
+    octopus: "numeric-8-box",
+    clothes: "hanger",
+    umbrella: "umbrella",
+    waterBottle: "water",
+    others: "shape-plus",
+  };
+
+
+  var getAvatar = (type) => {
+    return avatarMapping[type];
+  };
 
   return (
+    <PaperProvider theme={cardTheme}>
     <View style={styles.view}>
       <Appbar.Header>
-        <Appbar.Content title="Records" subtitle={"All Records"} />
+        <Appbar.Content title="Records" 
+        // subtitle={"All Records"} 
+        />
         <Appbar.Action icon="refresh" onPress={getData} />
       </Appbar.Header>
       <ScrollView>
@@ -124,26 +147,40 @@ const HomeStackScreen = ({ navigation }) => {
         <FlatList
           data={locationKey}
           renderItem={({ item }) => (
+
             <Card style={styles.card}>
               {/* {image && <Image source={{}} style={styles.image} />} */}
-              <Card.Title title={typeMapping[records[item].type]} subtitle={records[item].date} />
+              
+              <Card.Title 
+                title={typeMapping[records[item].type]} 
+                subtitle={records[item].date} 
+                
+                left = {props => <Avatar.Icon {...props} icon={getAvatar(records[item].type)} />}
+              
+              />
               <Card.Content>
                 <Title>{records[item].description}</Title>
-                <Paragraph>Location: {records[item].location}</Paragraph>
+                <Paragraph>Location: {abbrMapping[records[item].location]}</Paragraph>
                 <Paragraph>Detailed Lcoation: {records[item].detailedLocation}</Paragraph>
                 <Paragraph>Retrieve: {records[item].retrieve}</Paragraph>
-                <Button mode={"contained"} onPress={() =>
+                {/* <Button mode={"contained"} onPress={() =>
                   navigation.navigate('DisplayImage', { key: item })
                 } icon="image">
                   View Image
-                </Button>
+                </Button> */}
               </Card.Content>
+              <Card.Actions>
+              <Button onPress={() =>
+                  navigation.navigate('DisplayImage', { key: item })
+                }>View Image</Button>
+              </Card.Actions>
 
             </Card>
           )}
         />
       </ScrollView>
     </View>
+    </PaperProvider>
   );
 };
 
@@ -159,7 +196,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   view: {
-    marginBottom: 80,
+    //marginBottom: 80,
+    backgroundColor: "#eaeaea",
+    flex: 1
   },
   image: {
     width: Dimensions.get("window").width,
@@ -167,5 +206,16 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
 });
+
+const cardTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#4d9503',
+    accent: '#60be00',
+    //background: '#eaeaea',
+    //surface: '#f0fdf4',
+  },
+};
 
 export default EntryHomeScreen;

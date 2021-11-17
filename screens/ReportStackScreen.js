@@ -3,14 +3,15 @@
 // import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet, ScrollView, Text, Platform, Alert, LogBox, Dimensions } from "react-native";
+import { Image, View, StyleSheet, ScrollView, Text, Platform, Alert, LogBox, Dimensions, Pressable } from "react-native";
 import { FormBuilder } from "react-native-paper-form-builder";
 import { useForm } from "react-hook-form";
-import { TextInput, Button, Provider, Appbar } from "react-native-paper";
+import { TextInput, Button, Provider as PaperProvider, Appbar, DefaultTheme } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import firebase from "firebase";
 import uuid from 'react-native-uuid';
+import color from 'color';
 // import fbConfig from "../config/firebaseCongfig";
 
 const firebaseConfig = {
@@ -117,6 +118,20 @@ const SettingStackScreen = ({ navigation }) => {
       : "";
   };
 
+  const getDateOnly = () => {
+    let tempDateOnly = date.toString().split(" ");
+    return date !== ""
+      ? `${tempDateOnly[0]} ${tempDateOnly[1]} ${tempDateOnly[2]} ${tempDateOnly[3]}`
+      : "";
+  };
+
+  const getTimeOnly = () => {
+    let tempTimeOnly = date.toString().split(" ");
+    return date !== ""
+      ? `${tempTimeOnly[4].substring(0, 5)}`
+      : "";
+  };
+
   var onSubmit = (data, date) => {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
@@ -156,7 +171,7 @@ const SettingStackScreen = ({ navigation }) => {
       });
     this.uploadImage(image, uid)
       .then(() => {
-        Alert.alert("Image Upload Succesful");
+        Alert.alert("Image Upload Successfully");
       })
       .catch((error) => {
         console.log("test4");
@@ -169,11 +184,11 @@ const SettingStackScreen = ({ navigation }) => {
   return (
     <View style={styles.containerStyle}>
       <Appbar.Header>
-        <Appbar.Content title="Report Lost Items" />
+        <Appbar.Content title="Report Lost Item" />
       </Appbar.Header>
       <ScrollView contentContainerStyle={styles.scrollViewStyle}>
-        <Provider>
-          <Text style={styles.headingStyle}>Report Lost Item</Text>
+        <PaperProvider theme={theme}>
+          {/* <Text style={styles.headingStyle}>Report Lost Item</Text> */}
 
           <FormBuilder
             control={control}
@@ -190,7 +205,7 @@ const SettingStackScreen = ({ navigation }) => {
                 },
                 textInputProps: {
                   label: "Type",
-                  left: <TextInput.Icon name={"shape"} />,
+                  left: <TextInput.Icon name={"shape"}  color={"#009345"}/>,
                 },
                 options: [
                   {
@@ -198,8 +213,8 @@ const SettingStackScreen = ({ navigation }) => {
                     label: "Electronic Device",
                   },
                   {
-                    value: "walletOrCreditCard",
-                    label: "Wallet/Credit Card",
+                    value: "wallet",
+                    label: "Wallet",
                   },
                   {
                     value: "sidCard",
@@ -221,9 +236,6 @@ const SettingStackScreen = ({ navigation }) => {
                     value: "waterBottle",
                     label: "Water Bottle",
                   },
-                  { value: "love",
-                    label: "Love",
-                  },
                   {
                     value: "others",
                     label: "Others",
@@ -241,41 +253,22 @@ const SettingStackScreen = ({ navigation }) => {
                 },
                 textInputProps: {
                   label: "Location",
-                  left: <TextInput.Icon name={"city"} />,
+                  left: <TextInput.Icon name={"city"} color={"#009345"} />,
                 },
                 options: [
                   {
-                    label: "Chong Yuet Ming Building",
-                    value: "CYM",
+                    label: "Chong Yuet Ming Physics Building",
+                    value: "CYP",
                   },
                   {
-                    label: "Noida",
-                    value: 2,
+                    label: "Kadoorie Biological Sciences Building",
+                    value: "KBSB",
                   },
                   {
-                    label: "Delhi",
-                    value: 3,
+                    label: "Haking Wong Building",
+                    value: "HW",
                   },
-                  {
-                    label: "Bangalore",
-                    value: 4,
-                  },
-                  {
-                    label: "Pune",
-                    value: 5,
-                  },
-                  {
-                    label: "Mumbai",
-                    value: 6,
-                  },
-                  {
-                    label: "Ahmedabad",
-                    value: 7,
-                  },
-                  {
-                    label: "Patna",
-                    value: 8,
-                  },
+                  
                 ],
               },
               {
@@ -283,44 +276,70 @@ const SettingStackScreen = ({ navigation }) => {
                 name: "detailedLocation",
                 textInputProps: {
                   label: "Detailed Location",
-                  left: <TextInput.Icon name={"map-marker"} />,
+                  left: <TextInput.Icon name={"map-marker"} color={"#009345"} />,
                 },
               },
               {
                 type: "text",
                 name: "description",
+                rules: {
+                  required: {
+                    value: true,
+                    message: "Description is required",
+                  },
+                },
                 textInputProps: {
                   label: "Description",
-                  left: <TextInput.Icon name={"card-text-outline"} />,
+                  left: <TextInput.Icon name={"card-text"} color={"#009345"} />,
                 },
               },
               {
                 type: "text",
                 name: "contact",
+                rules: {
+                  required: {
+                    value: true,
+                    message: "Retrieving method is required",
+                  },
+                },
                 textInputProps: {
                   label: "How to retrieve",
-                  left: <TextInput.Icon name={"card-account-phone"} />,
+                  left: <TextInput.Icon name={"card-account-phone"} color={"#009345"} />,
                 },
               },
             ]}
           />
-
-          <TextInput
-            mode="outlined"
-            label="Date"
-            disabled={true}
-            value={getDate()}
-            placeholder="Date..."
-            icon="calendar"
-            left={<TextInput.Icon name={"calendar-clock"} />}
-          />
           <View style={styles.datetimeButnContainer}>
-            <Button style={styles.datetimeButn} mode={"contained"} onPress={showDatepicker} icon="calendar-search">
+            {/* <Button style={styles.datetimeButn} mode={"contained"} onPress={showDatepicker} icon="calendar-search">
               Date
             </Button>
             <Button style={styles.datetimeButn} mode={"contained"} onPress={showTimepicker} icon="clock">
               Time
-            </Button>
+            </Button> */}
+            <Pressable onPress={showDatepicker}>
+            <TextInput
+              
+              mode="outlined"
+              label="Date"
+              disabled={true}
+              value={getDateOnly()}
+              placeholder="Date..."
+              icon="calendar"
+              left={<TextInput.Icon name={"calendar"} color={"#009345"} />}
+            />
+            </Pressable>
+            <Pressable onPress={showTimepicker}>
+              <TextInput
+                
+                mode="outlined"
+                label="Time"
+                disabled={true}
+                value={getTimeOnly()}
+                placeholder="Time..."
+                icon="calendar"
+                left={<TextInput.Icon name={"clock"} color={"#009345"} />}
+              />
+            </Pressable>
           </View>
           {show && (
             <DateTimePicker
@@ -334,24 +353,37 @@ const SettingStackScreen = ({ navigation }) => {
             />
           )}
 
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Button mode={"contained"} title="Pick an image from camera roll" onPress={pickImage} icon="image">
+          <View>
+            <Button mode={"contained"} title="Pick an image from camera roll" onPress={pickImage} icon="image-plus" style={styles.imageButton} >
               Upload Image 
             </Button>
             {image && <Image source={{ uri: image }} style={styles.image} />}
           </View>
-          <Button mode={"contained"} onPress={handleSubmit(onSubmit)} icon="send">
+          <Button mode={"contained"} onPress={handleSubmit(onSubmit)} icon="send" style={styles.submitButton}>
             Submit
           </Button>
-        </Provider>
+        </PaperProvider>
       </ScrollView>
     </View>
   );
 };
 
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#4d9503',
+    accent: '#60be00',
+    //background: '#eaeaea',
+    placeholder: color('black').alpha(0.65).rgb().string(),
+    disabled: color('black').alpha(0.5).rgb().string(),
+  },
+};
+
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
+    backgroundColor: "#eaeaea",
   },
   scrollViewStyle: {
     flexGrow: 1,
@@ -375,13 +407,22 @@ const styles = StyleSheet.create({
   },
   datetimeButnContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   image: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').width,
     resizeMode: 'contain'
+  },
+  imageButton: {
+    marginVertical: 15,
+    marginHorizontal: 30,
+  },
+  submitButton: {
+    marginVertical: 15,
+    marginHorizontal: 30,
   }
+
 });
 
 export default SettingStackScreen;

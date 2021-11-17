@@ -10,14 +10,21 @@ import ReportStackScreen from "./ReportStackScreen";
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabScreen = () => (
-  <Tab.Navigator initialRouteName="Home" activeColor="#fff">
+  <Tab.Navigator 
+    initialRouteName="Home" 
+    activeColor="#fff"
+    inactiveColor="#1d3900"
+    barStyle={{ backgroundColor: '#6dbc2f' }}
+    shifting={true}
+  >
     <Tab.Screen
       name="Home"
       component={HomeStackScreen}
       options={{
         tabBarLabel: "Home",
-        tabBarColor: "#FF6347",
-        tabBarIcon: ({ color }) => <Icon name="ios-home" color={color} size={26} />,
+        //tabBarColor: "#FF6347",
+        tabBarIcon: ({ color }) => 
+        <Icon name="ios-home" color={color} size={26} />,
       }}
     />
     <Tab.Screen
@@ -25,7 +32,7 @@ const MainTabScreen = () => (
       component={MapStackScreen}
       options={{
         tabBarLabel: "Map",
-        tabBarColor: "#1f65ff",
+        //tabBarColor: "#1f65ff",
         tabBarIcon: ({ color }) => <Icon name="ios-map" color={color} size={26} />,
       }}
     />
@@ -34,8 +41,8 @@ const MainTabScreen = () => (
       component={ReportStackScreen}
       options={{
         tabBarLabel: "Report Lost Item",
-        tabBarColor: "#694fad",
-        tabBarIcon: ({ color }) => <Icon name="document-text-outline" color={color} size={26} />,
+        //tabBarColor: "#694fad",
+        tabBarIcon: ({ color }) => <Icon name="document-text" color={color} size={26} />,
       }}
     />
   </Tab.Navigator>
