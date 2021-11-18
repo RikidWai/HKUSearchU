@@ -209,28 +209,28 @@ const SettingStackScreen = ({ navigation }) => {
                 },
                 options: [
                   {
+                    value: "clothes",
+                    label: "Clothing",
+                  },
+                  {
                     value: "elecDev",
                     label: "Electronic Device",
-                  },
-                  {
-                    value: "wallet",
-                    label: "Wallet",
-                  },
-                  {
-                    value: "sidCard",
-                    label: "Student ID Card",
                   },
                   {
                     value: "octopus",
                     label: "Octopus",
                   },
                   {
-                    value: "clothes",
-                    label: "Clothes",
+                    value: "sidCard",
+                    label: "Student ID Card",
                   },
                   {
                     value: "umbrella",
                     label: "Umbrella",
+                  },
+                  {
+                    value: "wallet",
+                    label: "Wallet",
                   },
                   {
                     value: "waterBottle",
@@ -255,20 +255,43 @@ const SettingStackScreen = ({ navigation }) => {
                   label: "Location",
                   left: <TextInput.Icon name={"city"} color={"#009345"} />,
                 },
-                options: [
-                  {
-                    label: "Chong Yuet Ming Physics Building",
-                    value: "CYP",
-                  },
-                  {
-                    label: "Kadoorie Biological Sciences Building",
-                    value: "KBSB",
-                  },
-                  {
-                    label: "Haking Wong Building",
-                    value: "HW",
-                  },
-                  
+                options: [            
+                  {label: "Central Podium/Chi Wah Learning Commons",value: "CPD",},
+                  {label: "Cheng Yu Tung Tower (Law)",value: "CCT",},
+                  {label: "Chong Yuet Ming Amenities Centre",value: "CYA",},
+                  {label: "Chong Yuet Ming Chemistry Building",value: "CYC",},
+                  {label: "Chong Yuet Ming Physics Building",value: "CYP",},
+                  {label: "Chow Yei Ching Building",value: "CB",},
+                  {label: "Composite Building",value: "COB",},
+                  {label: "Eliot Hall",value: "EH",},
+                  {label: "Fung Ping Shan Building",value: "FP",},
+                  {label: "Graduate House",value: "GH",},
+                  {label: "Haking Wong Building",value: "HW",},
+                  {label: "Hui Oi Chow Science Building/Innowing",value: "HC",},
+                  {label: "Hung Hing Ying Building",value: "HH",},
+                  {label: "James Hsioung Lee Science Building",value: "JL",},
+                  {label: "K.K. Leung Building",value: "KK",},
+                  {label: "Kadoorie Biological Sciences Building",value: "KBSB",},
+                  {label: "Knowles Building",value: "KB",},
+                  {label: "Library Building",value: "LBN",},
+                  {label: "Main Building",value: "MB",},
+                  {label: "May Hall",value: "MH",},
+                  {label: "Meng Wah Complex Building",value: "MW",},
+                  {label: "Pao Siu Loong Building",value: "PS",},
+                  {label: "Price Philip Dental Hospital",value: "DENTAL",},
+                  {label: "Rayson Huang Theatre",value: "RH",},
+                  {label: "Robert Black College",value: "RBC",},
+                  {label: "Run Run Shaw Building",value: "RR",},
+                  {label: "Run Run Shaw Tower (Arts)",value: "CRT",},
+                  {label: "Runme Shaw Building",value: "RM",},
+                  {label: "Sassoon Road Campus",value: "SASSOON",},
+                  {label: "Swire Hall",value: "SWH",},
+                  {label: "T.T. Tsui Building",value: "TT",},
+                  {label: "Tang Chi Ngong Building",value: "TC",},
+                  {label: "The Jockey Club Tower (Social Sciences)",value: "CJT",},
+                  {label: "University Drive No.2",value: "UD",},
+                  {label: "University Lodge",value: "UL",},
+                  {label: "Yam Pak Building",value: "YP",},
                 ],
               },
               {
